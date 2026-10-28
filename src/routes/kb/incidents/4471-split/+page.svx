@@ -1,0 +1,66 @@
+---
+layout: runbook
+title: '#4471 · three problems, not one'
+owner: support desk
+status: living
+reviewed: 2026-10-28
+signature: v1.eyJzdWIiOiI0MTAxIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMxNzg1MDIsImV4cCI6MTc5MzI2NDkwMn0.UQ1qdUgfbUoEfCzeRwPtvzAuqWW6OIEZNeOz7VXP_7U
+---
+
+<script>
+  import ProblemSplit from '#lib/kb/ProblemSplit.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+
+  const { signature } = metadata;
+</script>
+
+[#4471](/kb/incidents/4471) merged every report about a wrong date into one ticket and marked it
+known, with one fix queued. Read against the tenant directory, the 412 reports hold **three
+problems**. The queued fix covers only the first.
+
+<Callout kind="warn">
+Do not close #4471 when the parser fix ships. The booking form hint and the one-day moves are still open.
+</Callout>
+
+## The split
+
+<ProblemSplit ticket={4471} />
+
+- **`parser`** — the shared parser reads every date month first. Every tenant on file writes the
+  day first, so their dates come out flipped (`7 April` becomes `4 July`). This is the bug #4471
+  was written for, and it is most of the queue.
+- **`hint`** — tenants on `booking-v3` (Alder Physio, Copper Studio, Pale Harbour) print
+  `MM/DD/YYYY` under the date field. Their people type what the hint tells them, month first,
+  and the form reads it the tenant's way. The reports look the same, but the parser fix does
+  not touch them: the hint has to change. Only `form` reports qualify.
+- **`oneDayMove`** — the month and the day number are right; the weekday is one day off. The
+  desk read five reports this way ([desk notes](/kb/incidents/4471)): a Lisbon and a Toronto
+  client got different days for one meeting, one invite arrived before the booking was made,
+  and one tenant sees the move only in June. Nobody has found the cause yet. Treat it as
+  unexplained until someone reproduces it. These five sit under `parser` in the older table
+  below because they came from day-first tenants.
+
+## Why the old count hid it
+
+Intake tags a report from the reporter's browser, a guess. It disagrees with the cause the
+tenant directory gives: of the `hint` reports, intake tagged 15 as `parser`, and it tagged 23
+of the `parser` reports as `hint`. The tag cannot be used to merge. Decision
+[0001](/kb/decisions/0001-dedupe-by-subject) merges on subject alone, and twelve subject lines
+cover all 412 reports, so every cause shares them.
+
+The ticket export also pages with overlap: it holds 427 rows for 412 reports. Count by id.
+
+## The older view
+
+<CauseTable ticket={4471} />
+
+## Next
+
+- File and track the three problems separately, each with its count.
+- Change the `booking-v3` hint to `DD/MM/YYYY` for day-first tenants, or make the form read what the hint says.
+- Reproduce a one-day move before naming its cause.
+- Replace decision 0001: merge on cause, not on subject. A decision is never edited, so this is a new record.
+
+<RenderStamp {signature} />
