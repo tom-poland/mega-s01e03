@@ -18,10 +18,11 @@ signature: v1.eyJzdWIiOiI0MTAxIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYX
 
 [#4471](/kb/incidents/4471) merged every report about a wrong date into one ticket and marked it
 known, with one fix queued. Read against the tenant directory, the 412 reports hold **three
-problems**. The queued fix covers only the first.
+problems**. The fix that shipped covers only the first.
 
-<Callout kind="warn">
-Do not close #4471 when the parser fix ships. The booking form hint and the one-day moves are still open.
+<Callout>
+Engineering closed #4471 on 5 October. `parser` is fixed. `hint` is won't fix, because the
+booking-v3 form is retired. The one-day moves have no outcome yet.
 </Callout>
 
 ## The split
@@ -56,11 +57,18 @@ The ticket export also pages with overlap: it holds 427 rows for 412 reports. Co
 
 <CauseTable ticket={4471} />
 
+## Where each problem ended up
+
+| problem | reports | outcome |
+|---|---|---|
+| `parser` | 374 (379 as the desk counts, with the 5 one-day moves filed under it) | fixed: `fix(dates): parse dd/mm for eu locales`; ticket closed |
+| `hint` | 33 | won't fix: the booking-v3 form is retired; ticket closed |
+| `oneDayMove` | 5 | no engineering outcome; ticket still open |
+
 ## Next
 
-- File and track the three problems separately, each with its count.
-- Change the `booking-v3` hint to `DD/MM/YYYY` for day-first tenants, or make the form read what the hint says.
-- Reproduce a one-day move before naming its cause.
+- Reproduce a one-day move before naming its cause; the ticket stays open until someone does.
 - Replace decision 0001: merge on cause, not on subject. A decision is never edited, so this is a new record.
+- Re-read this page when the one-day moves get an outcome.
 
 <RenderStamp {signature} />
