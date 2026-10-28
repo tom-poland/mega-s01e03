@@ -6,7 +6,7 @@ Source: kb export (`kb/support-kb/`), `reports-4471.json` (427 rows, 412 unique 
 
 | problem | reports | what it is |
 |---|---|---|
-| `parser` | 374 | Shared parser reads dates month first; all 11 tenants write day first. This is what the queued fix covers. |
+| `parser` | 379 (as exported; 374 without the 5 one-day moves) | Shared parser reads dates month first; all 11 tenants write day first. This is what the queued fix covers. |
 | `hint` | 33 | `booking-v3` tenants (alder.physio, copper.studio, pale.harbour) show `MM/DD/YYYY` under the date field; `form` channel only. The parser fix does not touch it. |
 | `oneDayMove` | 5 | Month and day number right, weekday one day off (R-41202, R-41209, R-41236, R-41344, R-41620). Cause unknown; hints at a time zone. |
 

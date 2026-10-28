@@ -4,7 +4,7 @@ The 412 reports merged into #4471 hold three problems:
 
 | problem | reports | issue |
 |---|---|---|
-| parser reads dates month first | 374 | #1 |
+| parser reads dates month first | 379 (5 of them also #3) | #1 |
 | booking-v3 form hint says MM/DD/YYYY | 33 | #2 |
 | invite day one day off | 5 | #3 |
 
